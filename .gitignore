@@ -5,3 +5,8 @@
 !*.go
 !*.py
 !*.cpp
+!*.agda
+
+
+*/MAlonzo
+
