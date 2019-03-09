@@ -43,15 +43,9 @@ reservedOp = Tok.reservedOp lexer
 prefixOp :: String -> (a -> a) -> Ex.Operator String () Identity a
 prefixOp s f = Ex.Prefix (reservedOp s >> return f)
 
-
 table :: Ex.OperatorTable String () Identity Term
 table =
-  [ [ prefixOp "succ"  TmSucc
-    , prefixOp "pred"  TmPred
-    , prefixOp "zero?" TmIsZero
-    ]
-  ]
-
+  [[prefixOp "succ" TmSucc, prefixOp "pred" TmPred, prefixOp "zero?" TmIsZero]]
 
 -- if/then/else
 ifthen :: Parser Term
@@ -63,17 +57,14 @@ ifthen = do
   reserved "else"
   TmIf cond tv <$> term
 
-
 -- Constants
 true, false, zero :: Parser Term
 true = reserved "true" >> return TmTrue
 false = reserved "false" >> return TmFalse
 zero = reservedOp "0" >> return TmZero
 
-
 term :: Parser Term
 term = Ex.buildExpressionParser table factor
-
 
 factor :: Parser Term
 factor = true <|> false <|> zero <|> ifthen <|> parens term
@@ -95,6 +86,3 @@ main :: IO ()
 main = do
   ppt expr0
   ppt expr1
-  return ()
-
-
